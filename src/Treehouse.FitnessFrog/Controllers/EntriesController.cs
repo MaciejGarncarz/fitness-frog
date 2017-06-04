@@ -54,6 +54,11 @@ namespace Treehouse.FitnessFrog.Controllers
         [HttpPost]
         public ActionResult Add(Entry entry)
         {
+            if (ModelState.IsValidField("Duration") && entry.Duration <= 0)
+            {
+                ModelState.AddModelError("Duration", "The duration must be greater than 0");
+            }
+
             if (ModelState.IsValid)
             {
                 _entriesRepository.AddEntry(entry);
@@ -74,7 +79,14 @@ namespace Treehouse.FitnessFrog.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
+
+
             return View();
+        }
+        [HttpPost]
+        public ActionResult Edit(Entry entry)
+        {
+            return View(entry);
         }
 
         public ActionResult Delete(int? id)
